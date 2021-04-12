@@ -10,7 +10,7 @@ def build_available_moves_list(n):
 
 
 class PNT:
-    def ___init___(self, n=9):
+    def __init__(self, n=9):
         self.n = n
         self.last_move = None
         self.available_moves = build_available_moves_list(n)
