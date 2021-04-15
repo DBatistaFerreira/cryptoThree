@@ -20,6 +20,12 @@ class PNT:
         self.player_min = Min()
         self.turn = self.player_max
 
+    def is_multiple(self, token):
+        return token % self.last_move == 0
+
+    def is_factor(self, token):
+        return self.last_move % token == 0
+
     def valid_first_moves(self):
         first_moves = []
         for i in range_inclusive(1, int(self.n / 2)):
@@ -28,17 +34,22 @@ class PNT:
 
         return first_moves
 
-    def is_multiple(self, token):
-        return token % self.last_move == 0
+    def is_valid_first_move(self, token):
+        return self.available_moves.__contains__(token) and self.valid_first_moves().__contains__(token)
 
-    def is_factor(self, token):
-        return self.last_move % token == 0
+    def valid_moves(self):
+        if self.last_move is None:
+            return self.valid_first_moves()
+
+        valid_moves = []
+        for token in self.available_moves:
+            if self.is_valid_move(token):
+                valid_moves.append(token)
+
+        return valid_moves
 
     def is_valid_move(self, token):
         return self.available_moves.__contains__(token) and (self.is_multiple(token) or self.is_factor(token))
-
-    def is_valid_first_move(self, token):
-        return self.available_moves.__contains__(token) and self.valid_first_moves().__contains__(token)
 
     def next_turn_player(self):
         return self.player_min if self.turn is self.player_max else self.player_max
@@ -47,7 +58,7 @@ class PNT:
         print(f'winner: {self.next_turn_player().name}')
 
     def game_over(self):
-        return not self.available_moves
+        return not self.valid_moves()
 
     def take(self, token):
         if self.last_move is None:
