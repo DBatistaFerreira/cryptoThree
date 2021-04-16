@@ -1,6 +1,4 @@
 from cryptolib import range_inclusive
-from max import Max
-from min import Min
 
 
 def build_available_moves_list(n):
@@ -16,8 +14,8 @@ class PNT:
         self.n = n
         self.last_move = None
         self.available_moves = build_available_moves_list(n)
-        self.player_max = Max()
-        self.player_min = Min()
+        self.player_max = 'Max'
+        self.player_min = 'Min'
         self.turn = self.player_max
 
     def is_multiple(self, token):
@@ -55,7 +53,7 @@ class PNT:
         return self.player_min if self.turn is self.player_max else self.player_max
 
     def declare_winner(self):
-        print(f'winner: {self.next_turn_player().name}')
+        print(f'Winner: {self.next_turn_player()}!')
 
     def game_over(self):
         return not self.valid_moves()
@@ -65,14 +63,18 @@ class PNT:
             if self.is_valid_first_move(token):
                 self.available_moves.remove(token)
                 self.last_move = token
-                print(f'{self.turn.name} played: {token}')
+                print(f'{self.turn} played: {token}')
                 self.turn = self.next_turn_player()
-                return True
         elif self.is_valid_move(token):
             self.available_moves.remove(token)
             self.last_move = token
-            print(f'{self.turn.name} played: {token}')
+            print(f'{self.turn} played: {token}')
             self.turn = self.next_turn_player()
-            return True
 
-        return False
+    def is_prime(self, prime):
+        for token in self.valid_moves():
+            if token == 1:
+                continue
+            if prime % token == 0:
+                return False
+        return True

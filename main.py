@@ -1,13 +1,14 @@
 from pnt import PNT
+import game
 
 
 def main():
-    print('hello world')
-    test_pnt()
+    game.start()
+    # test_pnt(g.pnt)
 
 
-def test_pnt():
-    pnt = PNT(10)
+def test_pnt(gpnt):
+    pnt = gpnt
     print(f'n: {pnt.n}')
     while not pnt.game_over():
         print(f'available moves: {pnt.available_moves}')
