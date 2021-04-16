@@ -4,12 +4,12 @@ import game
 
 def main():
     game.start()
-    # test_pnt(g.pnt)
+    # test_pnt()
 
 
-def test_pnt(gpnt):
-    pnt = gpnt
-    print(f'n: {pnt.n}')
+def test_pnt(game_pnt):
+    pnt = game_pnt
+    print(f'n: {pnt.tokens}')
     while not pnt.game_over():
         print(f'available moves: {pnt.available_moves}')
         print(f'valid moves: {pnt.valid_moves()}')

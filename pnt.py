@@ -10,10 +10,10 @@ def build_available_moves_list(n):
 
 
 class PNT:
-    def __init__(self, n=9):
-        self.n = n
+    def __init__(self, tokens):
+        self.tokens = tokens
         self.last_move = None
-        self.available_moves = build_available_moves_list(n)
+        self.available_moves = build_available_moves_list(tokens)
         self.player_max = 'Max'
         self.player_min = 'Min'
         self.turn = self.player_max
@@ -26,7 +26,7 @@ class PNT:
 
     def valid_first_moves(self):
         first_moves = []
-        for i in range_inclusive(1, int(self.n / 2)):
+        for i in range_inclusive(1, int(self.tokens / 2)):
             if i % 2 != 0:
                 first_moves.append(i)
 
@@ -53,7 +53,7 @@ class PNT:
         return self.player_min if self.turn is self.player_max else self.player_max
 
     def declare_winner(self):
-        print(f'Winner: {self.next_turn_player()}!')
+        return self.next_turn_player()
 
     def game_over(self):
         return not self.valid_moves()
