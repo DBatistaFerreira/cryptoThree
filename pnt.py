@@ -1,5 +1,3 @@
-import copy
-
 from cryptolib import range_inclusive
 
 

@@ -56,11 +56,15 @@ class Game:
                     winning_moves.append(best_move)
                 if beta <= alpha:
                     break
+                # comment the above 2 if's and all winning_moves related code then uncomment the below if statement to improve branching factor
+                # if value == 1 or beta <= alpha:
+                #     break
             # value == -1 indicates that all options lead to losing so return the lowest valid move
             if value == -1:
                 best_move = pnt.valid_moves()[0]
             if value == 1:
                 best_move = winning_moves[0]
+
             return [value, best_move]
         else:
             value = maxsize
@@ -77,6 +81,9 @@ class Game:
                     winning_moves.append(best_move)
                 if beta <= alpha:
                     break
+                # comment the above 2 if's and all winning_moves related code then uncomment the below if to improve branching factor
+                # if value == -1 or beta <= alpha:
+                #     break
             # value == 1 indicates that all options lead to losing so return the lowest valid move
             if value == 1:
                 best_move = pnt.valid_moves()[0]
