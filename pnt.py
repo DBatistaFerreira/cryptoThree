@@ -1,3 +1,5 @@
+import copy
+
 from cryptolib import range_inclusive
 
 
@@ -63,12 +65,10 @@ class PNT:
             if self.is_valid_first_move(token):
                 self.available_moves.remove(token)
                 self.last_move = token
-                print(f'{self.turn} played: {token}')
                 self.turn = self.next_turn_player()
         elif self.is_valid_move(token):
             self.available_moves.remove(token)
             self.last_move = token
-            print(f'{self.turn} played: {token}')
             self.turn = self.next_turn_player()
 
     def is_prime(self, prime):
