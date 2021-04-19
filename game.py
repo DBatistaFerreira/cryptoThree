@@ -33,38 +33,43 @@ class Game:
 
 def alpha_beta(pnt: PNT, depth: int, alpha: float, beta: float, maximizing_player: bool):
     if not pnt.valid_moves():
-        return [evaluate(pnt, maximizing_player)]
+        return [evaluate(pnt, not maximizing_player), pnt.last_move]
     if depth == 0:
-        return [evaluate(pnt, maximizing_player)]
+        return [evaluate(pnt, maximizing_player), pnt.valid_moves()[0]]
     best_move = 0
     if maximizing_player:
         value = - (maxsize - 1)
         for token in pnt.valid_moves():
-            pnt.take(token)
-            print(f"Best Move for man: {token}")
-            print(f"depth: {depth}")
-            print(f"Value: {value}\n")
-            child_value = alpha_beta(pnt, depth - 1, alpha, beta, False)
+            pnt_child = copy.deepcopy(pnt)
+            pnt_child.take(token)
+
+            child_value = alpha_beta(pnt_child, depth - 1, alpha, beta, False)
             value = max(value, child_value.pop(0))
             alpha = max(alpha, value)
             best_move = token
-            if beta <= alpha:
+            # value == 1 indicates that the current token leads to a win so break out
+            if value == 1 or beta <= alpha:
                 break
+        # value == -1 indicates that all options lead to losing so return the lowest valid move
+        if value == -1:
+            best_move = pnt.valid_moves()[0]
         return [value, best_move]
     else:
         value = maxsize
         for token in pnt.valid_moves():
-            pnt.take(token)
-            print(f"Best Move for min: {token}")
-            print(f"depth: {depth}")
-            print(f"Value: {value}\n")
+            pnt_child = copy.deepcopy(pnt)
+            pnt_child.take(token)
 
-            child_value = alpha_beta(pnt, depth - 1, alpha, beta, True)
+            child_value = alpha_beta(pnt_child, depth - 1, alpha, beta, True)
             value = min(value, child_value.pop(0))
             beta = min(beta, value)
             best_move = token
-            if beta <= alpha:
+            # value == -1 indicates that the current token leads to a win so break out
+            if value == -1 or beta <= alpha:
                 break
+        # value == 1 indicates that all options lead to losing so return the lowest valid move
+        if value == 1:
+            best_move = pnt.valid_moves()[0]
         return [value, best_move]
 
 
@@ -110,9 +115,11 @@ def initialize():
 
 def start():
     game = initialize()
+    if game.depth == 0:
+        game.depth = maxsize
     value = alpha_beta(game.pnt, game.depth, -math.inf, math.inf, True if game.pnt.turn == 'Max' else False)
     move = game.best_move        # best move (token number)
-    print(f'move: {move}\nvalue: {value}')
+    print(f'move: {value[1]}\nvalue: {value[0]}')
     visited = 0     # number of tokens visited during evaluation
     evaluated = 0   # number of tokens evaluated (end game state or specified depth)
     max_depth = 0   # max depth reached (root is 0)

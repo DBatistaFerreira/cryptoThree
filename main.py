@@ -7,8 +7,8 @@ def main():
     # test_pnt()
 
 
-def test_pnt(game_pnt):
-    pnt = game_pnt
+def test_pnt():
+    pnt = game.initialize().pnt
     print(f'n: {pnt.tokens}')
     while not pnt.game_over():
         print(f'available moves: {pnt.available_moves}')
@@ -16,17 +16,6 @@ def test_pnt(game_pnt):
         token = int(input())
         pnt.take(token)
         print()
-        # pnt.take(1)
-        # print()
-        # print(f'available moves: {pnt.available_moves}')
-        # print(f'valid moves: {pnt.valid_moves()}')
-        # pnt.take(2)
-        # print()
-        # print(f'available moves: {pnt.available_moves}')
-        # print(f'valid moves: {pnt.valid_moves()}')
-        # pnt.take(6)
-        # print()
-        # break
 
     pnt.declare_winner()
 
