@@ -117,6 +117,7 @@ class Game:
 def initialize():
     print(f'Enter game data <#tokens> <#taken_tokens> <list_of_taken_tokens> <depth>:\n')
     data = input().split()
+    data.pop(0)
     tokens = int(data.pop(0))
     taken_tokens = int(data.pop(0))
     depth = int(data.pop())
@@ -131,6 +132,7 @@ def file_initialize():
     file = open("testcases/testcase.txt", "r")
     for line in file:
         data = line.split()
+        data.pop(0)
         for token in data:
             print(token, end=" ")
         tokens = int(data.pop(0))

@@ -1,6 +1,10 @@
-input1:
-    TakeTokens 3 0 0
-input2:
-    TakeTokens 7 1 1 2
-input3:
-    TakeTokens 10 3 4 2 6 4
+TakeTokens 3 0 0
+TakeTokens 7 1 1 2
+TakeTokens 10 3 4 2 6 4
+TakeTokens 8 3 3 1 2 0
+TakeTokens 10 5 3 1 8 4 2 0
+TakeTokens 3 1 1 0
+TakeTokens 7 2 1 2 2
+TakeTokens 10 4 8 4 2 6 4
+TakeTokens 8 4 6 3 1 2 0
+TakeTokens 10 6 6 3 1 8 4 2 0
