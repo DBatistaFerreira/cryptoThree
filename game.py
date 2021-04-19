@@ -1,6 +1,8 @@
 import copy
 import math
 from sys import maxsize
+from typing import List
+
 from pnt import PNT
 
 
@@ -29,59 +31,68 @@ class Game:
         return pnt
 
 
-def alpha_beta(game: Game, depth: int, alpha: float, beta: float, maximizing_player: bool):
-    if depth == 0 or game.pnt.game_over():
-        return evaluate(game)
-
+def alpha_beta(pnt: PNT, depth: int, alpha: float, beta: float, maximizing_player: bool):
+    if not pnt.valid_moves():
+        return [evaluate(pnt, maximizing_player)]
+    if depth == 0:
+        return [evaluate(pnt, maximizing_player)]
+    best_move = 0
     if maximizing_player:
         value = - (maxsize - 1)
-        for token in game.pnt.valid_moves():
-            game.pnt.take(token)
-            value = max(value, alpha_beta(game, depth - 1, alpha, beta, False))
+        for token in pnt.valid_moves():
+            pnt.take(token)
+            print(f"Best Move for man: {token}")
+            print(f"depth: {depth}")
+            print(f"Value: {value}\n")
+            child_value = alpha_beta(pnt, depth - 1, alpha, beta, False)
+            value = max(value, child_value.pop(0))
             alpha = max(alpha, value)
-            game.best_move = token
+            best_move = token
             if beta <= alpha:
                 break
-        return value
+        return [value, best_move]
     else:
         value = maxsize
-        for token in game.pnt.valid_moves():
-            game.pnt.take(token)
-            value = min(value, alpha_beta(game, depth - 1, alpha, beta, True))
+        for token in pnt.valid_moves():
+            pnt.take(token)
+            print(f"Best Move for min: {token}")
+            print(f"depth: {depth}")
+            print(f"Value: {value}\n")
+
+            child_value = alpha_beta(pnt, depth - 1, alpha, beta, True)
+            value = min(value, child_value.pop(0))
             beta = min(beta, value)
-            game.best_move = token
+            best_move = token
             if beta <= alpha:
                 break
-        return value
+        return [value, best_move]
 
 
-def evaluate(game):
-    if game.pnt.game_over():
-        if game.pnt.declare_winner() == 'Max':
+def evaluate(pnt, maximizing_player):
+    if pnt.game_over():
+        if maximizing_player:
             return 1.0
         else:
             return -1.0
 
-    if game.pnt.turn == 'Max':
-        if 1 in game.pnt.valid_moves():
-            game.best_move = 1
+    if maximizing_player:
+        if 1 in pnt.valid_moves():
             return 0.0
-        elif game.pnt.last_move == 1:
-            return 0.5 if len(game.pnt.valid_moves()) % 2 == 1 else -0.5
-        elif game.pnt.is_prime(game.pnt.last_move):
-            return 0.7 if len(game.pnt.valid_moves()) % 2 == 1 else -0.7
-        elif not game.pnt.is_prime(game.pnt.last_move):
-            return 0.6 if len(game.pnt.valid_moves()) % 2 == 1 else -0.6
+        elif pnt.last_move == 1:
+            return 0.5 if len(pnt.valid_moves()) % 2 == 1 else -0.5
+        elif pnt.is_prime(pnt.last_move):
+            return 0.7 if len(pnt.valid_moves()) % 2 == 1 else -0.7
+        elif not pnt.is_prime(pnt.last_move):
+            return 0.6 if len(pnt.valid_moves()) % 2 == 1 else -0.6
     else:
-        if 1 in game.pnt.valid_moves():
-            game.best_move = 1
+        if 1 in pnt.valid_moves():
             return 0.0
-        elif game.pnt.last_move == 1:
-            return -0.5 if len(game.pnt.valid_moves()) % 2 == 1 else 0.5
-        elif game.pnt.is_prime(game.pnt.last_move):
-            return -0.7 if len(game.pnt.valid_moves()) % 2 == 1 else 0.7
-        elif not game.pnt.is_prime(game.pnt.last_move):
-            return -0.6 if len(game.pnt.valid_moves()) % 2 == 1 else 0.6
+        elif pnt.last_move == 1:
+            return -0.5 if len(pnt.valid_moves()) % 2 == 1 else 0.5
+        elif pnt.is_prime(pnt.last_move):
+            return -0.7 if len(pnt.valid_moves()) % 2 == 1 else 0.7
+        elif not pnt.is_prime(pnt.last_move):
+            return -0.6 if len(pnt.valid_moves()) % 2 == 1 else 0.6
 
 
 def initialize():
@@ -99,7 +110,7 @@ def initialize():
 
 def start():
     game = initialize()
-    value = alpha_beta(game, game.depth, -math.inf, math.inf, True if game.pnt.turn == 'Max' else False)
+    value = alpha_beta(game.pnt, game.depth, -math.inf, math.inf, True if game.pnt.turn == 'Max' else False)
     move = game.best_move        # best move (token number)
     print(f'move: {move}\nvalue: {value}')
     visited = 0     # number of tokens visited during evaluation
