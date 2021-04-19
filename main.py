@@ -1,10 +1,9 @@
-from pnt import PNT
 import game
 
 
 def main():
     game.start()
-    # test_pnt()
+    test_pnt()
 
 
 def test_pnt():
